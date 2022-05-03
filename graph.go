@@ -35,28 +35,24 @@ func (o *opGraph) panicIfLoop() {
 	for k := range o.all {
 		if len(o.deps[k]) == 0 {
 			q = append(q, k)
-			state[k] = VIEWED
-		} else {
-			state[k] = UNVISITED
 		}
+		state[k] = UNVISITED
 	}
-	for len(q) != 0 {
-		v := q[0]
 
-		// pop first and shift
-		for i := 1; i < len(q); i++ {
-			q[i-1] = q[i]
-		}
-		q = q[:len(q)-1]
-
-		state[v] = PROCESSED
+	var dfs func(v *Operator)
+	dfs = func(v *Operator) {
+		state[v] = VIEWED
 		for _, u := range o.rdeps[v] {
-			if state[u] == PROCESSED {
+			if state[u] == VIEWED {
 				panic("loop detected")
 			} else if state[u] == UNVISITED {
-				state[u] = VIEWED
-				q = append(q, u)
+				dfs(u)
 			}
 		}
+		state[v] = PROCESSED
+	}
+
+	for _, v := range q {
+		dfs(v)
 	}
 }
