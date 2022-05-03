@@ -1,4 +1,3 @@
-// Example of usage
 package iinit_test
 
 import (
