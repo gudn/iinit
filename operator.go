@@ -2,10 +2,17 @@ package iinit
 
 import "reflect"
 
+// Holder of init target
+//
+// All operators is just `func()` function. If error occured, you should degrade
+// (for example, replace with default value) or call panic.
 type Operator struct {
 	f func()
 }
 
+// Create a new Operator from given functions
+//
+// This create a new Operator for every call. Use it for closures
 func New(f func()) *Operator {
 	op := &Operator{f}
 	g.Lock()
@@ -14,6 +21,10 @@ func New(f func()) *Operator {
 	return op
 }
 
+// Create a static Operator from static function (not closure)
+//
+// You should use this functions when it possible because every Operator'll be
+// called only once
 func Static(f func()) *Operator {
 	g.Lock()
 	defer g.Unlock()
@@ -29,6 +40,8 @@ func Static(f func()) *Operator {
 	}
 }
 
+// Add to `v` some dependencies.
+// This means `v` will be runned after all it dependencies
 func (v *Operator) Deps(deps ...*Operator) {
 	if v == nil {
 		return
@@ -41,12 +54,14 @@ func (v *Operator) Deps(deps ...*Operator) {
 	}
 }
 
+// Create ephemeral operator and add all provided as deps
 func Parrallel(ops ...*Operator) *Operator {
 	op := New(func() {})
 	op.Deps(ops...)
 	return op
 }
 
+// Define a sequence of operators
 func Sequential(ops ...*Operator) *Operator {
 	if len(ops) == 0 {
 		return nil

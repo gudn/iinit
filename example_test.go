@@ -1,4 +1,5 @@
-package main
+// Example of usage
+package iinit_test
 
 import (
 	"fmt"
@@ -40,6 +41,6 @@ func init() {
 	iinit.Iinit()
 }
 
-func main() {
+func Example() {
 	iinit.Rerun(iinit.Static(second))
 }
