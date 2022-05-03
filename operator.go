@@ -55,7 +55,7 @@ func (v *Operator) Deps(deps ...*Operator) {
 }
 
 // Create ephemeral operator and add all provided as deps
-func Parrallel(ops ...*Operator) *Operator {
+func Parallel(ops ...*Operator) *Operator {
 	op := New(func() {})
 	op.Deps(ops...)
 	return op

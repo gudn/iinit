@@ -27,7 +27,7 @@ func printer(what string) func() {
 
 func init() {
 	iinit.Sequential(
-		iinit.Parrallel(
+		iinit.Parallel(
 			iinit.Static(first),
 			iinit.Static(second),
 		),
