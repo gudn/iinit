@@ -26,7 +26,7 @@ func printer(what string) func() {
 
 func init() {
 	iinit.Sequential(
-		iinit.ParallelS(first, second),
+		iinit.ParallelS(third, second),
 		iinit.New(printer("after parallel")),
 	)
 	iinit.Sequential(
